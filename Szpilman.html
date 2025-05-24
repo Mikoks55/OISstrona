@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Kartoteka SCP - Nadinspektor Mesejusz Plagowicki</title>
+    <style>
+        body {
+            background-color: #00111f;
+            color: #7fffd4;
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .header-logo {
+            position: fixed;
+            top: 20px;
+            width: 360px;
+            height: 120px;
+            object-fit: contain;
+            filter: grayscale(100%) contrast(700%) drop-shadow(0 0 5px #00aeff) invert(1);
+            z-index: 1000;
+            opacity: 0.85;
+        }
+
+        #scp-logo { right: 20px; }
+        #department-logo { left: 20px; }
+
+        #warning-screen {
+            text-align: center;
+            border: 3px solid #ff5555;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 230px auto 50px;
+            background: #001a2f;
+        }
+
+        .terminal-button {
+            background: #002b4d;
+            color: #7fffd4;
+            border: 2px solid #0099ff;
+            padding: 12px 25px;
+            margin: 0 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .terminal-button:hover {
+            background: #004d80;
+            box-shadow: 0 0 15px #00aaff;
+        }
+
+        #dossier {
+            display: none;
+            border: 2px solid #003366;
+            padding: 25px;
+            margin-top: 200px;
+            background: #000d1a;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #004d99;
+            margin-bottom: 25px;
+        }
+
+        .tab {
+            padding: 12px 25px;
+            cursor: pointer;
+            background: #002240;
+            border: 1px solid #0059b3;
+            margin-right: 8px;
+            transition: all 0.3s;
+            color: #66ccff;
+        }
+
+        .tab:hover { background: #003566; }
+        .tab.active { background: #004080; border-color: #0077ff; color: #b3e5ff; }
+
+        .content-section {
+            display: none;
+            min-height: 300px;
+            padding: 20px;
+            border: 1px solid #004d99;
+            position: relative;
+            background: #00152b;
+        }
+
+        .content-section.active { display: block; }
+
+        .redacted {
+            background: #000;
+            color: #000;
+            padding: 0 5px;
+            border-radius: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        td, th {
+            border: 1px solid #004d99;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .profile-container {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .profile-photo {
+            width: 250px;
+            height: 350px;
+            border: 2px solid #004d99;
+            filter: grayscale(100%) contrast(120%);
+            object-fit: cover;
+        }
+
+        .medical-logo {
+            width: 360px;
+            height: 120px;
+            object-fit: contain;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            filter: grayscale(100%) contrast(700%) drop-shadow(0 0 5px #00aeff) invert(1);
+            opacity: 0.7;
+        }
+
+        .medical-corner {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 80px;
+            height: 80px;
+            transform: rotate(45deg);
+            border-right: 3px dashed #7fffd466;
+            border-bottom: 3px dashed #7fffd466;
+            background: #00152b;
+            box-shadow: 0 0 12px #00aeff33;
+        }
+
+        .medical-corner::after {
+            content: '';
+            position: absolute;
+            top: 35px;
+            left: 35px;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ff5555;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        .psychological-text {
+            column-count: 2;
+            column-gap: 40px;
+            text-align: justify;
+            hyphens: auto;
+            padding: 15px;
+            border: 1px dashed #00aeff;
+            margin: 20px 0;
+        }
+
+        .additional-notes {
+            padding: 15px;
+            border-left: 3px solid #ff5555;
+            margin-top: 20px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.8); opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <img src="InfoSCP.png" class="header-logo" id="department-logo">
+    <img src="FundacjaSCPlogo.png" class="header-logo" id="scp-logo">
+
+    <div id="warning-screen">
+        <h2>█▄▄ █▀▀ █▄░█ █▀█ █ █▄░█ █▀▀   █▀ ▀█▀ █░█ █▀▀ █▄░█ █▀▀</h2>
+        <p>DOSTĘP DO MATERIAŁÓW KLASYFIKOWANYCH WYMAGA AUTORYZACJI POZIOMU 4</p>
+        <p>CZY NA PEWNO CHCESZ KONTYNUOWAĆ?<br>
+            <button class="terminal-button" onclick="grantAccess()">[T] TAK</button>
+            <button class="terminal-button" onclick="denyAccess()">[N] NIE</button>
+        </p>
+        <div id="loading" style="display:none;">ŁĄDOWANIE KARTOTEKI...</div>
+    </div>
+
+    <div id="dossier">
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('personal')">DANE OSOBOWE</div>
+            <div class="tab" onclick="switchTab('appearance')">WYGLĄD</div>
+            <div class="tab" onclick="switchTab('medical')">DOKUMENTACJA MED.</div>
+            <div class="tab" onclick="switchTab('psycho')">PROFIL PSYCH.</div>
+            <div class="tab" onclick="switchTab('history')">HISTORIA</div>
+        </div>
+
+        <!-- DANE OSOBOWE -->
+        <div id="personal" class="content-section active">
+            <div class="profile-container">
+                <table>
+                    <tr><th>ID, Imię i nazwisko</th><td>6740 Szpilman ███████ ███████</td></tr>
+                    <tr><th>Pseudonim operacyjny</th><td>"Szpilan"</td></tr>
+                    <tr><th>Poziom Dostępu</th><td>4 (Sciśle Tajne)</td></tr>
+                    <tr><th>Narodowość</th><td>Polska</td></tr>
+                    <tr><th>Etniczność</th><td>Słowiańska</td></tr>
+                    <tr><th>Języki</th><td>PL (ojczysty), EN (biegły)</td></tr>
+                    <tr><th>Płeć</th><td>Mężczyzna</td></tr>
+                    <tr><th>Lokalizacja</th><td>Ośrodek 65</td></tr>
+                    <tr><th>Departament</th><td>Jednostka Szybkiego Reagowania (RRT)</td></tr>
+                    <tr><th>Stopień</th><td>Podporucznik (SLT)</td></tr> 
+                </table>
+                <img src="Szpilman.png" class="profile-photo" alt="Podporucznik Szpilman">
+            </div>
+        </div>
+
+        <!-- WYGLĄD -->
+        <div id="appearance" class="content-section">
+            <h3>CHARAKTERYSTYKA FIZYCZNA</h3>
+            <div class="psychological-text">
+                <p>WZROST: 185cm | WAGA: 82kg</p>
+                <ul>
+                    <li>Atletyczna budowa ciała</li>
+                    <li>Blizna pooperacyjna na prawym ramieniu</li>
+                    <li>Zawsze idealnie wyczyszczone buty</li>
+                </ul>
+                <p>Wygląd: Nienagannie wyprostowana postawa, krótko przycięte włosy, zimne niebieskie oczy. Zawsze nosi mundur zgodnie z regulaminem.</p>
+            </div>
+        </div>
+
+        <!-- DOKUMENTACJA MEDYCZNA -->
+        <div id="medical" class="content-section">
+            <div class="medical-corner"></div>
+            <img src="DMscp.png" class="medical-logo">
+            <h3>RAPORT MEDYCZNY #SIER-65</h3>
+            <div class="psychological-text">
+			    <p>Grupa Krwi: AB</p>
+                <h4>OPERACJE:</h4>
+                <ul>█████████
+                </ul>
+                
+                <h4>HISTORIA CHORÓB:</h4>
+                <ul>
+                    <li>█████████-<span class="redacted">███</span> </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- PROFIL PSYCHOLOGICZNY -->
+        <div id="psycho" class="content-section">
+            <div class="psychological-text">
+                <h3>ANALIZA PSYCHOLOGICZNA #PSY-228</h3>
+                <p>"Wzorcowy przykład dyscypliny i profesjonalizmu. Wykazuje wyjątkową zdolność do utrzymania zimnej krwi w ekstremalnych sytuacjach. Jego podejście do podwładnych jest surowe, ale sprawiedliwe."</p>
+                
+                <h4>KLUCZOWE OBSERWACJE:</h4>
+                <ul>
+                    <li>Perfekcjonizm operacyjny</li>
+                    <li>Wysokie zdolności przywódcze</li>
+                    <li>Testy stresowe: 99% skuteczności</li>
+                </ul>
+            </div>
+            <div class="additional-notes">
+                <p>Dr Nowak: "Najszybszy awans w historii RRT - od szeregowego do podporucznika w 19 dni. Rekord wciąż niepobity."</p>
+            </div>
+        </div>
+
+        <!-- HISTORIA -->
+        <div id="history" class="content-section">
+            <h3>ARCHIWUM OPERACYJNE</h3>
+            <div class="psychological-text">
+                <h4>KARIERA:</h4>
+                <p>Dołączył do Fundacji po udanej akcji neutralizacji SCP-███ jako cywil. Przeszkolenie podstawowe ukończył z wyróżnieniem.</p>
+                
+                <h4>WYRÓŻNIAJĄCE AKCJE:</h4>
+                <ul>
+                    <li>Operacja "Stalowy Horyzont": Dowodził ewakuacją Ośrodka-██</li>
+                    <li>Incydent 77-██: Skuteczna koordynacja 3 zespołów RRT</li>
+                    <li>Misja "Cichy Sztorm": Rekordowo szybka neutralizacja zagrożenia</li>
+                </ul>
+
+                <h4>OSIĄGNIĘCIA:</h4>
+                <ul>
+                    <li>Najmłodszy oficer w historii RRT</li>
+                    <li>100% skuteczności w prowadzonych operacjach</li>
+                    <li>Twórca programu szkoleniowego "Żelazna Dyscyplina"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function grantAccess() {
+            document.getElementById("warning-screen").style.display = "none";
+            document.getElementById("loading").style.display = "block";
+            setTimeout(() => {
+                document.getElementById("loading").style.display = "none";
+                document.getElementById("dossier").style.display = "block";
+            }, 2000);
+        }
+
+        function denyAccess() {
+            window.location.href = "about:blank";
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>
