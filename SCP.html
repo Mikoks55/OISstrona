@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Kartoteka SCP - Nadinspektor Mesejusz Plagowicki</title>
+    <title>ARCHIWUM OSOBOWE - FUNDACJA SCP</title>
     <style>
         body {
             background-color: #00111f;
@@ -10,315 +10,193 @@
             font-family: 'Courier New', monospace;
             margin: 0;
             padding: 20px;
-            position: relative;
-            min-height: 100vh;
         }
 
         .header-logo {
-            position: fixed;
-            top: 20px;
-            width: 360px;
-            height: 120px;
-            object-fit: contain;
-            filter: grayscale(100%) contrast(700%) drop-shadow(0 0 5px #00aeff) invert(1);
-            z-index: 1000;
-            opacity: 0.85;
+            width: 300px;
+            margin: 20px auto;
+            display: block;
+            filter: grayscale(100%) contrast(700%) drop-shadow(0 0 5px #00aeff);
         }
 
-        #scp-logo { right: 20px; }
-        #department-logo { left: 20px; }
-
-        #warning-screen {
-            text-align: center;
+        .security-warning {
             border: 3px solid #ff5555;
-            padding: 2rem;
-            max-width: 600px;
-            margin: 230px auto 50px;
-            background: #001a2f;
-        }
-
-        .terminal-button {
-            background: #002b4d;
-            color: #7fffd4;
-            border: 2px solid #0099ff;
-            padding: 12px 25px;
-            margin: 0 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-        }
-
-        .terminal-button:hover {
-            background: #004d80;
-            box-shadow: 0 0 15px #00aaff;
-        }
-
-        #dossier {
-            display: none;
-            border: 2px solid #003366;
-            padding: 25px;
-            margin-top: 200px;
-            background: #000d1a;
-        }
-
-        .tabs {
-            display: flex;
-            border-bottom: 2px solid #004d99;
-            margin-bottom: 25px;
-        }
-
-        .tab {
-            padding: 12px 25px;
-            cursor: pointer;
-            background: #002240;
-            border: 1px solid #0059b3;
-            margin-right: 8px;
-            transition: all 0.3s;
-            color: #66ccff;
-        }
-
-        .tab:hover { background: #003566; }
-        .tab.active { background: #004080; border-color: #0077ff; color: #b3e5ff; }
-
-        .content-section {
-            display: none;
-            min-height: 300px;
             padding: 20px;
-            border: 1px solid #004d99;
-            position: relative;
-            background: #00152b;
+            max-width: 800px;
+            margin: 50px auto;
+            text-align: center;
         }
 
-        .content-section.active { display: block; }
-
-        .redacted {
-            background: #000;
-            color: #000;
-            padding: 0 5px;
-            border-radius: 2px;
+        .personnel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
-        }
-
-        td, th {
-            border: 1px solid #004d99;
-            padding: 8px;
-            text-align: left;
-        }
-
-        .profile-container {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
-
-        .profile-photo {
-            width: 250px;
-            height: 350px;
+        .personnel-card {
             border: 2px solid #004d99;
-            filter: grayscale(100%) contrast(120%);
-            object-fit: cover;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #000d1a;
+            position: relative;
         }
 
-        .medical-logo {
-            width: 360px;
-            height: 120px;
-            object-fit: contain;
+        .personnel-card:hover {
+            border-color: #00aeff;
+            box-shadow: 0 0 15px #00aeff33;
+        }
+
+        .personnel-photo {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+            border: 1px solid #004d99;
+        }
+
+        .agent-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(120%);
+        }
+
+        .agent-id {
             position: absolute;
             bottom: 10px;
+            left: 10px;
+            background: #000000aa;
+            color: #7fffd4;
+            padding: 5px 10px;
+            font-size: 0.9em;
+            border: 1px solid #00aeff;
+        }
+
+        .access-level {
+            position: absolute;
+            top: 10px;
             right: 10px;
-            filter: grayscale(100%) contrast(700%) drop-shadow(0 0 5px #00aeff) invert(1);
-            opacity: 0.7;
+            background: #ff5555;
+            color: #000;
+            padding: 5px 10px;
+            font-size: 0.8em;
+            z-index: 1;
         }
 
-        .medical-corner {
-            position: absolute;
-            top: -15px;
-            right: -15px;
-            width: 80px;
-            height: 80px;
-            transform: rotate(45deg);
-            border-right: 3px dashed #7fffd466;
-            border-bottom: 3px dashed #7fffd466;
-            background: #00152b;
-            box-shadow: 0 0 12px #00aeff33;
-        }
-
-        .medical-corner::after {
-            content: '';
-            position: absolute;
-            top: 35px;
-            left: 35px;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ff5555;
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
-        }
-
-        .psychological-text {
-            column-count: 2;
-            column-gap: 40px;
-            text-align: justify;
-            hyphens: auto;
-            padding: 15px;
-            border: 1px dashed #00aeff;
-            margin: 20px 0;
-        }
-
-        .additional-notes {
-            padding: 15px;
-            border-left: 3px solid #ff5555;
-            margin-top: 20px;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.8); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(0.8); opacity: 0.5; }
+        .search-box {
+            width: 300px;
+            margin: 20px auto;
+            padding: 10px;
+            background: #002240;
+            border: 1px solid #004d99;
+            color: #7fffd4;
         }
     </style>
 </head>
 <body>
-    <img src="InfoSCP.png" class="header-logo" id="department-logo">
-    <img src="FundacjaSCPlogo.png" class="header-logo" id="scp-logo">
+    <img src="FundacjaSCPlogo.png" class="header-logo" alt="Logo Fundacji">
 
-    <div id="warning-screen">
-        <h2>█▄▄ █▀▀ █▄░█ █▀█ █ █▄░█ █▀▀   █▀ ▀█▀ █░█ █▀▀ █▄░█ █▀▀</h2>
-        <p>DOSTĘP DO MATERIAŁÓW KLASYFIKOWANYCH WYMAGA AUTORYZACJI</p>
-        <p>CZY NA PEWNO CHCESZ KONTYNUOWAĆ?<br>
-            <button class="terminal-button" onclick="grantAccess()">[T] TAK</button>
-            <button class="terminal-button" onclick="denyAccess()">[N] NIE</button>
-        </p>
-        <div id="loading" style="display:none;">ŁĄDOWANIE KARTOTEKI...</div>
+    <div class="security-warning">
+        <h2>█▀▀ █░█ █▀█ █▀▀ █▀▄ █▀▀ █▀█</h2>
+        <p>DOSTĘP DO ARCHIWUM OSOBOWEGO WYMAGA POZIOMU DOSTĘPU 3 LUB WYŻSZEGO</p>
     </div>
 
-    <div id="dossier">
-        <div class="tabs">
-            <div class="tab active" onclick="switchTab('personal')">DANE OSOBOWE</div>
-            <div class="tab" onclick="switchTab('appearance')">WYGLĄD</div>
-            <div class="tab" onclick="switchTab('medical')">DOKUMENTACJA MED.</div>
-            <div class="tab" onclick="switchTab('psycho')">PROFIL PSYCH.</div>
-            <div class="tab" onclick="switchTab('history')">HISTORIA</div>
+    <input type="text" class="search-box" placeholder="Wpisz nazwisko lub kod identyfikacyjny..." onkeyup="filterCards(this.value)">
+
+    <div class="personnel-grid" id="personnelGrid">
+        <!-- Karta 1 - Mesejusz Plagowicki -->
+        <div class="personnel-card" onclick="window.location.href='plagowicki.html'">
+            <div class="access-level">POZIOM 4</div>
+            <div class="personnel-photo">
+                <img src="plagowicki.jpg" class="agent-photo" alt="Mesejusz Plagowicki">
+                <div class="agent-id">ID: ██-███-████</div>
+            </div>
+            <h3>Mesejusz Plagowicki</h3>
+            <p>"Mr. Kij"</p>
+            <p>Departament Bezpieczeństwa / OIS <br>Nadinspektor / Nadzorca OIS</p>
         </div>
 
-        <!-- DANE OSOBOWE -->
-        <div id="personal" class="content-section active">
-            <div class="profile-container">
-                <table>
-                    <tr><th>Imię i nazwisko</th><td>Mesejusz Plagowicki</td></tr>
-                    <tr><th>Pseudonim operacyjny</th><td>"Mr. Kij"</td></tr>
-                    <tr><th>Poziom Dostępu</th><td>4 (Ściśle Tajne)</td></tr>
-                    <tr><th>Narodowość</th><td>Polska</td></tr>
-                    <tr><th>Etniczność</th><td>Słowiańska</td></tr>
-                    <tr><th>Języki</th><td>PL (ojczysty), EN/ (biegły) </td></tr>
-                    <tr><th>Płeć</th><td>Mężczyzna</td></tr>
-                    <tr><th>Lokalizacja</th><td>Ośrodek 65</td></tr>
-                    <tr><th>Departament</th><td>Departament Bezpieczeństwa (DB) / OIS</td></tr>
-                    <tr><th>Stopień</th><td>Nadinspektor</td></tr>
-                </table>
-                <img src="Mesejusz.png" class="profile-photo" alt="Mesejusz Plagowicki">
+        <!-- Karta 2 - Ludwik Zbig -->
+        <div class="personnel-card" onclick="window.location.href='#'">
+            <div class="access-level">POZIOM 4</div>
+            <div class="personnel-photo">
+                <img src="Ludwik.png" class="agent-photo" alt="Ludwik Zbig">
+                <div class="agent-id">ID: ██-███-████</div>
             </div>
+            <h3>Ludwik Zbig</h3>
+            <p>"Hunter"</p>
+            <p>Departament Bezpieczeństwa / OIS<br>Podkomisarz / Członek OIS</p>
         </div>
 
-        <!-- WYGLĄD -->
-        <div id="appearance" class="content-section">
-            <h3>CHARAKTERYSTYKA FIZYCZNA</h3>
-            <div class="psychological-text">
-                <p>WZROST: 182cm | WAGA: 87kg</p>
-                <p>Grupa Krwi: AB</p>
-                <ul>
-                    <li>Blizny na brzuchu (zamach przeprowadzony przez operatora Nu-7 Teiwaza)</li>
-                    <li>Tatuaż OIS (kod QR) na lewym przedramieniu</li>
-                </ul>
-                <p>Wygląd: Surowy wyraz twarzy, czarny mundur operacyjny z emblematem ISD, skórzane czarne rękawice, wysoki kołnierz. Włosy przystrzyżone na jeża, niebieskie oczy. Ruchy precyzyjne, militarna postawa. Dobra butowa ciała</p>
+        <!-- Karta 3 - Gregory Kowal -->
+        <div class="personnel-card" onclick="window.location.href='#'">
+            <div class="access-level">POZIOM 4</div>
+            <div class="personnel-photo">
+                <img src="kowal.jpg" class="agent-photo" alt="Gregory Kowal">
+                <div class="agent-id">ID: ██-███-████</div>
             </div>
+            <h3>Gregory Kowal</h3>
+            <p>"Pies"</p>
+            <p>Departament Bezpieczeństwa / OIS <br>Podkomisarz / Członek OIS</p>
         </div>
 
-        <!-- DOKUMENTACJA MEDYCZNA -->
-        <div id="medical" class="content-section">
-            <div class="medical-corner"></div>
-            <img src="DMscp.png" class="medical-logo">
-            <h3>RAPORT MEDYCZNY #PLAG-65</h3>
-            <div class="psychological-text">
-                <h4>OPERACJE:</h4>
-                <ul>
-                    <li>Operacja lewego płuca - zakończona skucesem</li>
-                </ul>
-                
-                <h4>HISTORIA CHORÓB:</h4>
-                <ul>
-                    <li>PTSD</li>
-                    <li>Przeszczep skóry po SCP-<span class="redacted">███</span> (przeszczep)</li>
-                </ul>
+        <!-- Karta 4 - Janusz Łoś -->
+        <div class="personnel-card" onclick="window.location.href='#'">
+            <div class="access-level">POZIOM 4</div>
+            <div class="personnel-photo">
+                <img src="los.jpg" class="agent-photo" alt="Janusz Łoś">
+                <div class="agent-id">ID: ██-███-████</div>
             </div>
+            <h3>Janusz Łoś</h3>
+            <p>"Łoś"</p>
+            <p>Departament Bezpieczeństwa / OIS <br>Nadkomisarz / Członek OIS</p>
         </div>
 
-        <!-- PROFIL PSYCHOLOGICZNY -->
-        <div id="psycho" class="content-section">
-            <div class="psychological-text">
-                <h3>ANALIZA PSYCHOLOGICZNA #PSY-447</h3>
-                <p>"98 percentyl w testach stresowych przy zerowej reakcji emocjonalnej. Reakcje społeczne – wyuczone schematy. Absolutna bezstronność"</p>
-                
-                <h4>KLUCZOWE OBSERWACJE:</h4>
-                <ul>
-                    <li>Autosugestia i ekspozycja na środki amnezyjne</li>
-                    <li>"Reakcja zimna" – hiperprecyzja pod stresem</li>
-                </ul>
+        <!-- Karta 5 - Wojtek ████████ -->
+        <div class="personnel-card" onclick="window.location.href='#'">
+            <div class="access-level">POZIOM █</div>
+            <div class="personnel-photo">
+                <img src="classified.png" class="agent-photo" alt="Zaklasyfikowany agent">
+                <div class="agent-id">ID: ██-███-████</div>
             </div>
-            <div class="additional-notes">
-                <p>Dr L. Kr.: "Nie jest przystosowany do społeczeństwa, lecz jako członek OiS i DB jest idealny."</p>
-            </div>
+            <h3>Wojtek ████████</h3>
+            <p>"Fred"</p>
+            <p>Departament Bezpieczeństwa / OIS <br>Nadkomisarz / Z-Nadzorca OIS</p>
         </div>
-
-        <!-- HISTORIA -->
-        <div id="history" class="content-section">
-            <h3>ARCHIWUM OPERACYJNE</h3>
-            <div class="psychological-text">
-                <h4>WCZESNE LATA:</h4>
-                <p>Ur. 198<span class="redacted">█</span>, syn oficera kontrwywiadu. Włamanie do sieci poligonu gdy miał 16 lat. Program „Wilczy Szlak”.</p>
-                
-                <h4>PRZED FUNDACJĄ:</h4>
-                <ul>
-                    <li>Konsultant NATO ds. interpretacji traktatów</li>
-                    <li>Operacje w GROM i "Czerwonym Wilku"</li>
-                    <li>Tworzenie fałszywych podstaw prawnych dla SKW</li>
-                </ul>
-
-                <h4>FUNDACJA:</h4>
-                <ul>
-                    <li>Rekrutacja po incydencie SCP-<span class="redacted">███</span></li>
-                    <li>Koordynator placówki <span class="redacted">███</span> - placówka została zamknięta, dostał amnestyki klasy <span class="redacted">██</span></li>
-                    <li>LT ochrony przez 2lata</li>
-                    <li>St. Badacz departamentu naukowego przez 3lata</li>
-                </ul>
+		<div class="personnel-card" onclick="window.location.href='#'">
+            <div class="access-level">POZIOM 3</div>
+            <div class="personnel-photo">
+                <img src="classified.jpg" class="agent-photo" alt="Zaklasyfikowany agent">
+                <div class="agent-id">ID: ██-███-████</div>
             </div>
+            <h3>Marcel Dzwonnikl</h3>
+            <p>"Dzwon"</p>
+            <p>Departament Bezpieczeństwa / OIS <br>Agent / Członek OIS</p>
+        </div>
+		<div class="personnel-card" onclick="window.location.href='#'">
+            <div class="access-level">POZIOM 3</div>
+            <div class="personnel-photo">
+                <img src="classified.jpg" class="agent-photo" alt="Zaklasyfikowany agent">
+                <div class="agent-id">ID: ██-███-████</div>
+            </div>
+            <h3>Dżordżetto Wajsl</h3>
+            <p>"Klipsson"</p>
+            <p>Departament Bezpieczeństwa / OIS <br>Młodszy Agent / Członek OIS</p>
         </div>
     </div>
 
     <script>
-        function grantAccess() {
-            document.getElementById("warning-screen").style.display = "none";
-            document.getElementById("loading").style.display = "block";
-            setTimeout(() => {
-                document.getElementById("loading").style.display = "none";
-                document.getElementById("dossier").style.display = "block";
-            }, 2000);
-        }
+        function filterCards(searchTerm) {
+            const cards = document.querySelectorAll('.personnel-card');
+            searchTerm = searchTerm.toLowerCase();
 
-        function denyAccess() {
-            window.location.href = "about:blank";
-        }
-
-        function switchTab(tabName) {
-            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-            event.currentTarget.classList.add('active');
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(searchTerm) ? 'block' : 'none';
+            });
         }
     </script>
 </body>
