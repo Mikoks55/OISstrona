@@ -110,6 +110,20 @@
             text-align: left;
         }
 
+        .profile-container {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .profile-photo {
+            width: 250px;
+            height: 350px;
+            border: 2px solid #004d99;
+            filter: grayscale(100%) contrast(120%);
+            object-fit: cover;
+        }
+
         .medical-logo {
             width: 360px;
             height: 120px;
@@ -194,19 +208,21 @@
 
         <!-- DANE OSOBOWE -->
         <div id="personal" class="content-section active">
-            <h3>PROFIL OPERACYJNY</h3>
-            <table>
-                <tr><th>Imię i nazwisko</th><td>Mesejusz Plagowicki</td></tr>
-                <tr><th>Pseudonim operacyjny</th><td>"Sędzia Kodu"</td></tr>
-                <tr><th>Poziom Dostępu</th><td>4 (Uprzywilejowany/Zaklasyfikowany)</td></tr>
-                <tr><th>Narodowość</th><td>Polska</td></tr>
-                <tr><th>Etniczność</th><td>Słowiańska</td></tr>
-                <tr><th>Języki</th><td>PL (ojczysty), EN/RU (biegły), DE (średni), Łacina techniczna</td></tr>
-                <tr><th>Płeć</th><td>Mężczyzna</td></tr>
-                <tr><th>Lokalizacja</th><td>Ośrodek 65</td></tr>
-                <tr><th>Departament</th><td>Bezpieczeństwo (DB) / OIS</td></tr>
-                <tr><th>Stopień</th><td>Nadinspektor</td></tr>
-            </table>
+            <div class="profile-container">
+                <table>
+                    <tr><th>Imię i nazwisko</th><td>Mesejusz Plagowicki</td></tr>
+                    <tr><th>Pseudonim operacyjny</th><td>"Mr. Kij"</td></tr>
+                    <tr><th>Poziom Dostępu</th><td>4 (Ściśle Tajne)</td></tr>
+                    <tr><th>Narodowość</th><td>Polska</td></tr>
+                    <tr><th>Etniczność</th><td>Słowiańska</td></tr>
+                    <tr><th>Języki</th><td>PL (ojczysty), EN/ (biegły) </td></tr>
+                    <tr><th>Płeć</th><td>Mężczyzna</td></tr>
+                    <tr><th>Lokalizacja</th><td>Ośrodek 65</td></tr>
+                    <tr><th>Departament</th><td>Departament Bezpieczeństwa (DB) / OIS</td></tr>
+                    <tr><th>Stopień</th><td>Nadinspektor</td></tr>
+                </table>
+                <img src="Mesejusz.png" class="profile-photo" alt="Mesejusz Plagowicki">
+            </div>
         </div>
 
         <!-- WYGLĄD -->
@@ -214,12 +230,12 @@
             <h3>CHARAKTERYSTYKA FIZYCZNA</h3>
             <div class="psychological-text">
                 <p>WZROST: 182cm | WAGA: 87kg</p>
+                <p>Grupa Krwi: AB</p>
                 <ul>
-                    <li>Blizna od skroni do szyi (eksplozja SCP w Kazachstanie)</li>
+                    <li>Blizny na brzuchu (zamach przeprowadzony przez operatora Nu-7 Teiwaza)</li>
                     <li>Tatuaż OIS (kod QR) na lewym przedramieniu</li>
-                    <li>Szklane lewe oko (BionOS-EyE)</li>
                 </ul>
-                <p>Wygląd: Surowy wyraz twarzy, czarny mundur operacyjny z emblematem OIS, skórzane rękawice, wysoki kołnierz. Włosy przystrzyżone na jeża, stalowoszare oczy. Ruchy precyzyjne, militarna postawa.</p>
+                <p>Wygląd: Surowy wyraz twarzy, czarny mundur operacyjny z emblematem ISD, skórzane czarne rękawice, wysoki kołnierz. Włosy przystrzyżone na jeża, niebieskie oczy. Ruchy precyzyjne, militarna postawa. Dobra butowa ciała</p>
             </div>
         </div>
 
@@ -229,19 +245,15 @@
             <img src="DMscp.png" class="medical-logo">
             <h3>RAPORT MEDYCZNY #PLAG-65</h3>
             <div class="psychological-text">
-                <h4>IMPLANTY:</h4>
+                <h4>OPERACJE:</h4>
                 <ul>
-                    <li>Tantal-5 – mikrokomputer w rdzeniu kręgowym</li>
-                    <li>SIVA-X3 – implant audio odporny na anomalie soniczne</li>
-                    <li>Revenant Beta – nano-regeneracja tkanek</li>
-                    <li>BionOS-EyE – oko z IR/UV/termowizją</li>
+                    <li>Operacja lewego płuca - zakończona skucesem</li>
                 </ul>
                 
                 <h4>HISTORIA CHORÓB:</h4>
                 <ul>
-                    <li>Zespół snu bojowego (kontrola farmakologiczna)</li>
-                    <li>Ekspozycja na Cognitohazard-III (ślad trwały)</li>
-                    <li>Ślepota po SCP-<span class="redacted">███</span> (przeszczep)</li>
+                    <li>PTSD</li>
+                    <li>Przeszczep skóry po SCP-<span class="redacted">███</span> (przeszczep)</li>
                 </ul>
             </div>
         </div>
@@ -250,17 +262,16 @@
         <div id="psycho" class="content-section">
             <div class="psychological-text">
                 <h3>ANALIZA PSYCHOLOGICZNA #PSY-447</h3>
-                <p>"98 percentyl w testach stresowych przy zerowej reakcji emocjonalnej. Zaburzenie tożsamości sytuacyjnej z powodu wieloletnich fałszywych person. Reakcje społeczne – wyuczone schematy."</p>
+                <p>"98 percentyl w testach stresowych przy zerowej reakcji emocjonalnej. Reakcje społeczne – wyuczone schematy. Absolutna bezstronność"</p>
                 
                 <h4>KLUCZOWE OBSERWACJE:</h4>
                 <ul>
                     <li>Autosugestia i ekspozycja na środki amnezyjne</li>
                     <li>"Reakcja zimna" – hiperprecyzja pod stresem</li>
-                    <li>Podejrzenie emisji pasywnych sygnałów memetycznych</li>
                 </ul>
             </div>
             <div class="additional-notes">
-                <p>Dr L. Krawczyk: "Wymaga ciągłego monitoringu memetycznego. Kod Lód-Świadomość 32-C aktywny."</p>
+                <p>Dr L. Kr.: "Nie jest przystosowany do społeczeństwa, lecz jako członek OiS i DB jest idealny."</p>
             </div>
         </div>
 
@@ -269,7 +280,7 @@
             <h3>ARCHIWUM OPERACYJNE</h3>
             <div class="psychological-text">
                 <h4>WCZESNE LATA:</h4>
-                <p>Ur. 198<span class="redacted">█</span>, syn oficera kontrwywiadu. Włamanie do sieci poligonu w 16 lat. Program „Wilczy Szlak”.</p>
+                <p>Ur. 198<span class="redacted">█</span>, syn oficera kontrwywiadu. Włamanie do sieci poligonu gdy miał 16 lat. Program „Wilczy Szlak”.</p>
                 
                 <h4>PRZED FUNDACJĄ:</h4>
                 <ul>
@@ -281,9 +292,9 @@
                 <h4>FUNDACJA:</h4>
                 <ul>
                     <li>Rekrutacja po incydencie SCP-<span class="redacted">███</span></li>
-                    <li>Autor reform Kodeksu Postępowania (-47% incydentów)</li>
-                    <li>Twórca Systemu DOK-99</li>
-                    <li>Uprawnienia: Keter Emergency Law, mandaty dyscyplinarne, interpretacja SCP:LEX</li>
+                    <li>Koordynator placówki <span class="redacted">███</span> - placówka została zamknięta, dostał amnestyki klasy <span class="redacted">██</span></li>
+                    <li>LT ochrony przez 2lata</li>
+                    <li>St. Badacz departamentu naukowego przez 3lata</li>
                 </ul>
             </div>
         </div>
